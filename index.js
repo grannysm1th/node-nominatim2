@@ -25,7 +25,7 @@ function Nominatim (options) {
   this.requestTimeout = options.timeout || 2500
   this.requestUserAgent = options.useragent || 'NodeJS request'
   this.requestReferer = options.referer || 'https://github.com/xbgmsharp/node-nominatim2'
-  this.url = 'http://nominatim.openstreetmap.org/';
+  this.url = options.url || 'http://nominatim.openstreetmap.org/';
   this.search_url = this.url + 'search?';
   this.reverse_url = this.url + 'reverse?';
   this.lookup_url = this.url + 'lookup?';
@@ -37,7 +37,7 @@ function Nominatim (options) {
 }
 
 Nominatim.prototype.search = function search (params, callback) {
-  
+
   if (!params.q) throw new NominatimError('Missing Query string to search for.');
   var opts = extend_query(params);
 
@@ -45,7 +45,7 @@ Nominatim.prototype.search = function search (params, callback) {
 	url: this.search_url,
 	qs: opts,
 	json: true,
-	headers: {'User-Agent': this.requestUserAgent, Referer: this.requestReferer}, 
+	headers: {'User-Agent': this.requestUserAgent, Referer: this.requestReferer},
 	timeout: this.requestTimeout
     }, function (err, res, data) {
     if (err) {
@@ -67,7 +67,7 @@ Nominatim.prototype.reverse = function reverse (params, callback) {
 	url: this.reverse_url,
 	qs: opts,
 	json: true,
-	headers: {'User-Agent': this.requestUserAgent, Referer: this.requestReferer}, 
+	headers: {'User-Agent': this.requestUserAgent, Referer: this.requestReferer},
 	timeout: this.requestTimeout
     }, function (err, res, data) {
     if (err) {
@@ -81,7 +81,7 @@ Nominatim.prototype.reverse = function reverse (params, callback) {
 };
 
 Nominatim.prototype.lookup = function lookup (params, callback) {
-  
+
   if (!params.osm_ids) throw new NominatimError('Missing osm node, way or relations ids to return the addresses for.');
   var opts = extend_query(params);
 
@@ -89,7 +89,7 @@ Nominatim.prototype.lookup = function lookup (params, callback) {
 	url: this.lookup_url,
 	qs: opts,
 	json: true,
-	headers: {'User-Agent': this.requestUserAgent, 'Referer': this.requestReferer}, 
+	headers: {'User-Agent': this.requestUserAgent, 'Referer': this.requestReferer},
 	timeout: this.requestTimeout
     }, function (err, res, data) {
     if (err) {
