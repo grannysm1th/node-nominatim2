@@ -1,3 +1,4 @@
+"use strict";
 var log = require('debug')('node-nominatim2'),
     request = require('request'),
     util = require('util');
@@ -27,13 +28,9 @@ function Nominatim (options) {
   this.requestReferer = options.referer || 'https://github.com/xbgmsharp/node-nominatim2'
   this.url = options.url || 'http://nominatim.openstreetmap.org/';
   this.search_url = this.url + 'search?';
-  this.reverse_url = this.url + 'reverse?';
+  this.reverse_url = this.url + 'reverse.php?';
   this.lookup_url = this.url + 'lookup?';
-  this.mapquestapi = {};
-  //this.mapquestapi.APIKey = options.APIKey;
-  this.mapquestapi.url = 'http://open.mapquestapi.com/nominatim/v1/';
-  this.mapquestapi.search_url = this.mapquestapi.url + 'search.php?';
-  this.mapquestapi.reverse_url = this.mapquestapi.url + 'reverse.php?';
+
 }
 
 Nominatim.prototype.search = function search (params, callback) {
@@ -62,7 +59,6 @@ Nominatim.prototype.reverse = function reverse (params, callback) {
 
   if (!params.lat || !params.lon) throw new NominatimError('Missing latitude/longitude to search for.');
   var opts = extend_query(params);
-
   request.get({
 	url: this.reverse_url,
 	qs: opts,
